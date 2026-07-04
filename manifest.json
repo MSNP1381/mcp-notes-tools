@@ -1,7 +1,7 @@
 {
 	"id": "mcp-notes-tools",
 	"name": "MCP Notes Tools",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"minAppVersion": "1.0.0",
 	"description": "Expose local MCP tools to search, read, and append confirmed change notes in a project vault.",
 	"author": "msnp",

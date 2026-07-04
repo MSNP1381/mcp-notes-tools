@@ -1,6 +1,6 @@
 {
 	"name": "mcp-notes-tools",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "Local MCP tools for searching, reading, and appending confirmed change notes in an Obsidian project vault.",
 	"main": "main.js",
 	"type": "module",
