@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "mcp-notes-tools",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Local MCP tools for searching, reading, and appending confirmed change notes in an Obsidian project vault.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
@@ -23,5 +23,9 @@
 		"obsidian": "latest",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.59.1"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.29.0",
+		"zod": "^4.4.3"
 	}
 }

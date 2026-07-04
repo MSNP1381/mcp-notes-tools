@@ -31,6 +31,7 @@ const context = await esbuild.context({
 		'@lezer/highlight',
 		'@lezer/lr',
 		...builtinModules,
+		...builtinModules.map((mod) => `node:${mod}`),
 	],
 	format: 'cjs',
 	target: 'es2021',

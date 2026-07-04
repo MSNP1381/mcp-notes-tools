@@ -1,92 +1,87 @@
-# Obsidian Sample Plugin
+# MCP Notes Tools
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+MCP Notes Tools is an Obsidian desktop plugin that exposes local MCP tools for a
+project-specific vault. It lets an MCP client search notes, read a selected note,
+and request a confirmed append-only change note.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
+- `obsidian_search_notes`: searches note title, vault-relative path, and note
+  body content.
+- `obsidian_get_note`: returns the full current content for one selected
+  markdown note.
+- `obsidian_append_change_note`: asks for confirmation, then appends text under a
+  `Change notes` section with a timestamp.
 
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and outputs a Notice on click.
-- Registers a global interval which logs 'setInterval' to the console.
+Every note reference includes both title and vault-relative path. Attachments,
+binary files, and plugin configuration files are out of scope.
 
-## First time developing plugins?
+## Privacy and Safety
 
-Quick starting guide for new plugin devs:
+The plugin operates locally on the active Obsidian vault. It does not send note
+content, filenames, metadata, or user identifiers to external services.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `src/main.ts` to `main.js`.
-- Make changes to `src/main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+Append requests always require per-write confirmation in Obsidian before any
+note is changed. Existing note content is preserved before the appended
+`Change notes` entry.
 
-## Releasing new releases
+## Desktop Only
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+This plugin is desktop-only because local MCP serving depends on desktop runtime
+capabilities that are not available in Obsidian mobile.
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+## Local MCP Endpoint
 
-## Adding your plugin to the community plugin list
+Enable the local MCP server in **Settings -> MCP Notes Tools**. The settings tab
+shows the endpoint, which defaults to:
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
-
-## How to use
-
-- Clone this repo.
-- Make sure your NodeJS is at least v18 (`node --version`).
-- `npm i` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
-
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint
-
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-	"fundingUrl": "https://buymeacoffee.com"
-}
+```text
+http://127.0.0.1:39399/mcp
 ```
 
-If you have multiple URLs, you can also do:
+Configure your MCP client to connect to that local endpoint while Obsidian is
+running and the plugin is enabled.
 
-```json
-{
-	"fundingUrl": {
-		"Buy Me a Coffee": "https://buymeacoffee.com",
-		"GitHub Sponsor": "https://github.com/sponsors",
-		"Patreon": "https://www.patreon.com/"
-	}
-}
+The plugin also exposes a vault-specific alias for clients that need to
+disambiguate project vaults:
+
+```text
+http://127.0.0.1:39399/vaults/<vault-slug>/mcp
 ```
 
-## API Documentation
+The alias is only a routing label for the current Obsidian vault. A mismatched
+slug is rejected; one plugin instance cannot query other vaults.
 
-See https://docs.obsidian.md
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development build:
+
+```bash
+npm run dev
+```
+
+Run validation checks:
+
+```bash
+npm run lint
+npm run build
+```
+
+Reload Obsidian after changing `manifest.json`. Reload the plugin after source
+changes so the generated `main.js` is loaded.
+
+## Release Artifacts
+
+Required release files:
+
+- `manifest.json`
+- `main.js`
+- `styles.css` if styles are used
+
+Do not edit `main.js` manually. Generate it with `npm run build`.

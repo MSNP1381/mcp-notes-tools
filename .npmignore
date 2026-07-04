@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+*.log
+.env*
+.playwright-cli/
+.git/
+.github/
+.specify/
+.agents/
+specs/
+src/
+tsconfig.json
+eslint.config.mts
+esbuild.config.mjs

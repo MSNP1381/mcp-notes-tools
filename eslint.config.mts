@@ -6,6 +6,10 @@ export default defineConfig(
 	globalIgnores([
 		'node_modules',
 		'dist',
+		'build',
+		'coverage',
+		'.playwright-cli',
+		'*.min.js',
 		'esbuild.config.mjs',
 		'version-bump.mjs',
 		'versions.json',
